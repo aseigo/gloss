@@ -44,6 +44,13 @@ defmodule Gloss.MixProject do
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.0"},
       {:phoenix_live_view, github: "phoenixframework/phoenix_live_view"}
+      | dev_deps()
+    ]
+  end
+
+  defp dev_deps() do
+    [
+      {:remixed_remix, "~> 1.0.0"}
     ]
   end
 
