@@ -1,0 +1,7 @@
+<section style="text-align: center">
+  <%= raw letter_jumps() %>
+</section>
+<section class="phx-hero">
+  Nomoko Glossary
+</section>
+
