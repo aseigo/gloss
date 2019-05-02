@@ -18,7 +18,7 @@ defmodule Gloss.Glossary do
 
   """
   def list_sections do
-    Repo.all(Section)
+    Repo.all(Section, order_by: :name)
   end
 
   @doc """
@@ -50,9 +50,13 @@ defmodule Gloss.Glossary do
 
   """
   def create_section(attrs \\ %{}) do
+    rv =
     %Section{}
     |> Section.changeset(attrs)
     |> Repo.insert()
+
+    notify_of_section_change()
+    rv
   end
 
   @doc """
@@ -68,9 +72,12 @@ defmodule Gloss.Glossary do
 
   """
   def update_section(%Section{} = section, attrs) do
-    section
+    rv = section
     |> Section.changeset(attrs)
     |> Repo.update()
+
+    notify_of_section_change()
+    rv
   end
 
   @doc """
@@ -86,7 +93,10 @@ defmodule Gloss.Glossary do
 
   """
   def delete_section(%Section{} = section) do
-    Repo.delete(section)
+    rv = Repo.delete(section)
+
+    notify_of_section_change()
+    rv
   end
 
   @doc """
@@ -100,5 +110,10 @@ defmodule Gloss.Glossary do
   """
   def change_section(%Section{} = section) do
     Section.changeset(section, %{})
+  end
+
+
+  defp notify_of_section_change() do
+    Phoenix.PubSub.broadcast(Gloss.PubSub, "sections", :changed)
   end
 end
