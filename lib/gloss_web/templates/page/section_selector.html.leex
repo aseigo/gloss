@@ -1,0 +1,8 @@
+<section style="padding-top: 2em;">
+  <form phx-change="change_section">
+     <%=
+      [current_section|_] = @sections
+      select(:section, :section, ["Section": @sections], selected: current_section, label: "Section")
+      %>
+  </form>
+</section>
