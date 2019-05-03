@@ -2,6 +2,7 @@
   <form phx-change="change_section">
      <%=
       [current_section|_] = @sections
+      current_section = Keyword.get(current_section, :value)
       select(:section, :section, ["Section": @sections], selected: current_section, label: "Section")
       %>
   </form>
