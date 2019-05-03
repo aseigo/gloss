@@ -13,11 +13,17 @@ defmodule Gloss.SectionsLive do
     {:ok, assign_sections(socket)}
   end
 
-  def handle_event("change_section", v, socket) do
+  def handle_event("change_section", %{"section" => %{"section" => v}}, socket) do
+    IO.inspect(v, label: "section selected")
+    Phoenix.PubSub.broadcast(Gloss.PubSub, "sections", {:selected_section, v})
     {:noreply, socket}
   end
 
-  def handle_info(:changed, socket) do
+  def handle_info(:sections_changed, socket) do
+    {:noreply, assign_sections(socket)}
+  end
+
+  def handle_info(_, socket) do
     {:noreply, assign_sections(socket)}
   end
 

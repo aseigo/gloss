@@ -1,7 +1,8 @@
-<section style="text-align: center">
+<section class="jumplist">
   <%= raw letter_jumps() %>
 </section>
-<section class="phx-hero">
-  Nomoko Glossary
-</section>
-
+<div class="wordlist">
+  <%= for {id, word} <- Gloss.Glossary.list_words(@current_section) do %>
+    <link phx-click="show_word" phx_value="<%= id %>"><%= word %></link>
+  <% end %>
+</div>

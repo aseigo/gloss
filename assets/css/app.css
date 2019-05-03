@@ -2,3 +2,25 @@
 
 @import "./phoenix.css";
 @import "../../deps/phoenix_live_view/assets/css/live_view.css";
+
+.wordlist {
+  -webkit-column-count: 3; /* Chrome, Safari, Opera */
+  -moz-column-count: 3; /* Firefox */
+  column-count: 3;
+
+  -webkit-column-gap: 2em; /* Chrome, Safari, Opera */
+  -moz-column-gap: 2em; /* Firefox */
+  column-gap: 2em;
+
+  -webkit-column-rule: 1px dotted #27b2ec; /* Chrome, Safari, Opera */
+  -moz-column-rule: 1px dotted #27b2ec; /* Firefox */
+  column-rule: 2px dotted #27b2ec;
+}
+
+.jumplist{
+  text-align: center;
+  padding-bottom: 0.5em;
+  margin-bottom: 0.5em;
+  border-bottom: solid 1px #27b2ec;
+}
+
