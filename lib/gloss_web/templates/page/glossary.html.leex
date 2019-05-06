@@ -1,11 +1,8 @@
-<section class="jumplist">
-  <%= raw letter_jumps() %>
-</section>
 <%= if @current_word do %>
 <% %{word: word, def: def} = Gloss.Glossary.get_word!(@current_word) %>
     <h3><%= word %></h3>
     <%= def %>
-    <hr class="jumplist">
+    <section class="jumplist"> </section>
 <% end %>
 
   <div class="wordlist">

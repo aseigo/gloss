@@ -1,5 +1,5 @@
 <section class="jumplist">
-  <%= raw letter_jumps() %>
+  <%= raw letter_jumps(@current_section) %>
 </section>
 <div class="wordlist">
   <%= for {id, word} <- Gloss.Glossary.list_words(@current_section) do %>
