@@ -1,7 +1,18 @@
-<%= if @current_word do %>
+<%= if @edit_word do %>
+  <%= f = form_for @edit_word, "#", [phx_submit: :save_word] %>
+    <%= label f, "Term", class: "control-label" %>
+    <%= text_input f, :word, class: "form-control" %>
+    <%= label f, "Definition", class: "control-label" %>
+    <%= textarea f, :def, class: "form-control" %>
+    <%= submit "Save", phx_disable_with: "Saving..." %>
+    <a href="#" phx-click="show_word" style="font-size: small;" phx-value="<%= @current_word %>">Cancel</link>&nbsp;
+  </form>
+<% end %>
+<%= if !@edit_word and @current_word do %>
 <% %{word: word, def: def} = Gloss.Glossary.get_word!(@current_word) %>
     <h3><%= word %></h3>
     <%= def %>
+    <p style="font-size: small; margin-top: 1em;"><a href="#" phx-click="edit_current_word">Edit...</a></p>
     <section class="jumplist"> </section>
 <% end %>
 
@@ -9,4 +20,7 @@
     <%= for {id, word} <- Gloss.Glossary.list_words(@current_section) do %>
       <a href="#" phx-click="show_word" phx-value="<%= id %>"><%= word %></link>
     <% end %>
+  </div>
+  <div style="margin-top: 1em">
+    <a href="#" phx-click="new_word" style="font-size: small;">Create new...</link>&nbsp;
   </div>
