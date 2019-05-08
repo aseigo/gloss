@@ -8,12 +8,9 @@ defmodule Gloss.Application do
   def start(_type, _args) do
     # List all child processes to be supervised
     children = [
-      # Start the Ecto repository
       Gloss.Repo,
-      # Start the endpoint when the application starts
-      GlossWeb.Endpoint
-      # Starts a worker by calling: Gloss.Worker.start_link(arg)
-      # {Gloss.Worker, arg},
+      GlossWeb.Endpoint,
+      Gloss.PdfExporter
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
