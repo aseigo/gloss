@@ -230,4 +230,39 @@ defmodule Gloss.Glossary do
   def change_word(%Word{} = word) do
     Word.changeset(word, %{})
   end
+
+  def export(format \\ :pdf, section \\ -1)
+  def export(:pdf, -1) do
+    export_pdf(list_sections())
+  end
+
+  def export(:pdf, section) when is_number(section) do
+    section = get_section!(section)
+    export_pdf([section])
+  end
+
+  defp export_pdf(sections) do
+    {:ok, path} =
+      sections
+      |> Enum.reduce("", &add_section_to_export/2)
+      |> PdfGenerator.generate()
+
+    path
+  end
+
+  defp add_section_to_export(section, html) do
+    html = html <> ~s(<h2 style="text-decoration: underline;">#{section.name}</h2>)
+    
+    query = from w in Word,
+              select: {w.word, w.def},
+              where: w.section_id == ^section.id,
+              order_by: w.word
+
+    Repo.all(query)
+    |> Enum.reduce(html, fn {term, def}, html -> html <> term_string(term, def) end)
+  end
+
+  defp term_string(term, def) do
+    ~s(\n<div style="margin-top: 1em;"><strong>#{term}</strong><br/>#{def}</div>)
+  end
 end
