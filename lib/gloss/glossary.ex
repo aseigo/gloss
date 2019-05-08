@@ -135,7 +135,8 @@ defmodule Gloss.Glossary do
   def list_words(section, prefix \\ nil) do
     query = from w in Word,
               select: {w.id, w.word},
-              where: w.section_id == ^section
+              where: w.section_id == ^section,
+              order_by: w.word
 
     query = 
       if is_binary(prefix) do

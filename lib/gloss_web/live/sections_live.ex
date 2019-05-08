@@ -6,16 +6,16 @@ defmodule Gloss.SectionsLive do
   end
 
   def mount(_session, socket) do
+    IO.inspect(socket, label: "mounted socket in page live")
     if (connected?(socket)) do
-      Phoenix.PubSub.subscribe(Gloss.PubSub, self(), "sections")
+      Phoenix.PubSub.subscribe(Gloss.PubSub, "sections")
     end
 
     {:ok, assign_sections(socket)}
   end
 
   def handle_event("change_section", %{"section" => %{"section" => v}}, socket) do
-    IO.inspect(v, label: "section selected")
-    Phoenix.PubSub.broadcast(Gloss.PubSub, "sections", {:selected_section, v})
+    Phoenix.PubSub.broadcast(Gloss.PubSub, socket.id, {:selected_section, v})
     {:noreply, socket}
   end
 

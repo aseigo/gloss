@@ -4,6 +4,8 @@ defmodule Gloss.Glossary.Section do
 
   schema "sections" do
     field :name, :string
+
+    has_many :words, Gloss.Glossary.Word
   end
 
   @doc false
