@@ -115,6 +115,7 @@ defmodule Gloss.Glossary do
 
   defp notify_of_section_change() do
     Phoenix.PubSub.broadcast(Gloss.PubSub, "sections", :sections_changed)
+    Gloss.PdfExporter.generate()
   end
 
   alias Gloss.Glossary.Word
@@ -179,9 +180,12 @@ defmodule Gloss.Glossary do
 
   """
   def create_word(attrs \\ %{}) do
-    %Word{}
-    |> Word.changeset(attrs)
-    |> Repo.insert()
+    rv = %Word{}
+         |> Word.changeset(attrs)
+         |> Repo.insert()
+
+    Gloss.PdfExporter.generate()
+    rv
   end
 
   @doc """
@@ -197,9 +201,12 @@ defmodule Gloss.Glossary do
 
   """
   def update_word(%Word{} = word, attrs) do
-    word
-    |> Word.changeset(attrs)
-    |> Repo.update()
+    rv = word
+         |> Word.changeset(attrs)
+         |> Repo.update()
+
+    Gloss.PdfExporter.generate()
+    rv
   end
 
   @doc """

@@ -84,6 +84,6 @@
   <% end %>
 </div>
 
-<div style="margin-top: 1em">
-  <a href="#" phx-click="new_word" style="font-size: small;">New entry...</link>&nbsp;
+<div style="margin-top: 1em; font-size: small;">
+  <a href="#" phx-click="new_word">New entry...</a>&nbsp;&middot;&nbsp;<a href="<%= Gloss.PdfExporter.url() %>">Download as PDF</a>
 </div>

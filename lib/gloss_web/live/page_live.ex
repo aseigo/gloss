@@ -45,7 +45,7 @@ defmodule GlossWeb.PageLive do
 
     current_section = Map.get(data, "section_id")
     {:noreply, socket 
-               |> assign(socket, edit_word: nil)
+               |> assign(create_word: nil, edit_word: nil)
                |> assign_current_section(current_section)
                |> update_word_list(current_section)
     }
