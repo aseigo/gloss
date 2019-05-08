@@ -88,6 +88,10 @@ defmodule GlossWeb.PageLive do
     {:noreply, assign(socket, current_word: id, create_word: nil, edit_word: nil)}
   end
 
+  def handle_event("section_select", %{"section_selector" => %{"section_selector" => ""}}, socket) do
+    {:noreply, socket}
+  end
+
   def handle_event("section_select", %{"section_selector" => %{"section_selector" => v}}, socket) do
     IO.puts("Changing section to #{v}")
     {:noreply, socket

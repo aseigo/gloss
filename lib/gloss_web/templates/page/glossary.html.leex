@@ -73,7 +73,7 @@
   <form phx-change="section_select">
      <%=
       IO.puts("Section is: #{@current_section}")
-      select(:section_selector, :section_selector, @sections, selected: @current_section, prompt: "Sections")
+      select(:section_selector, :section_selector, @sections, selected: @current_section)
       %>
   </form>
 </section>
