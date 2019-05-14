@@ -44,7 +44,12 @@ defmodule Gloss.MixProject do
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.0"},
       {:phoenix_live_view, github: "phoenixframework/phoenix_live_view"},
-      {:pdf_generator, "~> 0.5.3"}
+      {:pdf_generator, "~> 0.5.3"},
+
+      # deployment
+      {:distillery, "~> 2.0"},
+      {:edeliver, "~> 1.6.0"}
+
       | dev_deps()
     ]
   end
