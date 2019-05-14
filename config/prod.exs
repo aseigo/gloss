@@ -12,7 +12,7 @@ use Mix.Config
 config :gloss, GlossWeb.Endpoint,
   http: [:inet6, port: System.get_env("PORT") || 4000],
   url: [host: "http://glossary.nomoko.world", port: 80],
-  cache_static_manifest: "priv/static/cache_manifest.json"
+  cache_static_manifest: "priv/static/cache_manifest.json",
   render_errors: [view: GlossWeb.ErrorView, accepts: ~w(html json)],
   pubsub: [name: Gloss.PubSub, adapter: Phoenix.PubSub.PG2]
 
