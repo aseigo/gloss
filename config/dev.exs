@@ -21,6 +21,19 @@ config :gloss, GlossWeb.Endpoint,
     ]
   ]
 
+config :gloss, GlossWeb.Endpoint,
+   live_view: [
+     signing_salt: "mMtRO7nwTD4G1L4AuEYsvw9CmqDoVItY"
+   ]
+
+# Configures the endpoint
+config :gloss, GlossWeb.Endpoint,
+  url: [host: "localhost"],
+  secret_key_base: "XZB3dRBL4Eggv28fZUglSDIRSuGSZVO3DP8rhF03CV/m85gLcxtwmLTev2pTYD5H",
+  render_errors: [view: GlossWeb.ErrorView, accepts: ~w(html json)],
+  pubsub: [name: Gloss.PubSub, adapter: Phoenix.PubSub.PG2]
+
+
 # ## SSL Support
 #
 # In order to use HTTPS in development, a self-signed
