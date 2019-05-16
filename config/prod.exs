@@ -11,10 +11,11 @@ use Mix.Config
 # before starting your production server.
 config :gloss, GlossWeb.Endpoint,
   http: [:inet6, port: System.get_env("PORT") || 4000],
-  url: [host: "http://glossary.nomoko.world", port: 80],
-  cache_static_manifest: "priv/static/cache_manifest.json",
+  url: [host: "glossary.nomoko.world", port: 4000],
+#  cache_static_manifest: "priv/static/cache_manifest.json",
   render_errors: [view: GlossWeb.ErrorView, accepts: ~w(html json)],
-  pubsub: [name: Gloss.PubSub, adapter: Phoenix.PubSub.PG2]
+  pubsub: [name: Gloss.PubSub, adapter: Phoenix.PubSub.PG2],
+  check_origin: ["//glossary.nomoko.world:4000"]
 
 # Do not print debug messages in production
 config :logger, level: :info
