@@ -1,6 +1,10 @@
 defmodule GlossWeb.PageLive do
   use Phoenix.LiveView
 
+  def perma_link(id, word) do
+    "/term/#{id}/#{String.replace(word, " ", "_") |> URI.encode()}"
+  end
+
   def render(assigns) do
     GlossWeb.PageView.render("glossary.html", assigns)
   end
