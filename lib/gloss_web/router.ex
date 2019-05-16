@@ -17,6 +17,7 @@ defmodule GlossWeb.Router do
   scope "/", GlossWeb do
     pipe_through :browser
 
+    live "/term/:id/:term", PageLive
     live "/", PageLive
   end
 
