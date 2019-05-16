@@ -5,15 +5,25 @@ defmodule GlossWeb.PageLive do
     GlossWeb.PageView.render("glossary.html", assigns)
   end
 
-  def mount(_session, socket) do
+  def mount(%{path_params: %{"id" => id_param}}, socket) when is_bitstring(id_param) do
+    id =
+    case Integer.parse(id_param) do
+      :error -> nil
+      {id, _} -> id
+    end
+    assign(socket, :current_word, id) |> do_mount()
+  end
+
+  def mount(_session, socket), do: do_mount(socket)
+
+  defp do_mount(socket) do
     if (connected?(socket)) do
       Phoenix.PubSub.subscribe(Gloss.PubSub, "sections")
     end
 
     current_section = GlossWeb.LayoutView.sections() |> Enum.at(0) |> Keyword.get(:value)
-                      |> IO.inspect(label: "current section")
     {:ok, socket
-          |> assign(current_word: nil, create_word: nil, edit_word: nil)
+          |> assign(current_word: Map.get(socket.assigns, :current_word), create_word: nil, edit_word: nil)
           |> assign_current_section(current_section)
           |> assign_sections()
           |> update_word_list(current_section)
@@ -25,7 +35,6 @@ defmodule GlossWeb.PageLive do
                                               socket.assigns.current_word
                                               |> Gloss.Glossary.get_word!()
                                               |> Map.from_struct())
-                 |> IO.inspect(label: "edit word")
     {:noreply, assign(socket, edit_word: edit_word, create_word: nil)}
   end
 
@@ -53,7 +62,7 @@ defmodule GlossWeb.PageLive do
 
   def handle_event("new_word", _payload, socket) do
     word = %Gloss.Glossary.Word{} |> Ecto.Changeset.cast(%{section_id: socket.assigns.current_section}, [:section_id])
-    IO.puts("#{inspect socket.assigns.current_section} New word #{inspect word}")
+    #IO.puts("#{inspect socket.assigns.current_section} New word #{inspect word}")
     {:noreply, assign(socket, current_word: nil, edit_word: nil, create_word: word)}
   end
 
