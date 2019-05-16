@@ -61,7 +61,12 @@
 <%= if !@edit_word and @current_word do %>
 <% %{word: word, def: def, id: id} = Gloss.Glossary.get_word!(@current_word) %>
     <h3><%= word %></h3>
-    <%= def %>
+    <%=
+      case Earmark.as_html(def) do
+        {:ok, formatted_def, []} -> raw(formatted_def)
+        {:error, _} -> def
+      end
+    %>
     <p style="font-size: small; margin-top: 1em;">
       <a href="#" phx-click="edit_current_word">Edit...</a>
       &middot;
