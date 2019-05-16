@@ -1,5 +1,12 @@
-<%= if @create_word do %>
-  <%= f = form_for @create_word, "#", [phx_submit: :create_word] %>
+<%= if @create_word || @edit_word do %>
+  <%=
+    f =
+      if @create_word do
+        form_for @create_word, "#", [phx_submit: :create_word]
+      else
+        form_for @edit_word, "#", [phx_submit: :save_word]
+      end
+  %>
     <%= label f, "Section", class: "control-label" %>
     <div class="row">
     <%= select f, :section_id, 
@@ -10,39 +17,10 @@
     <%= label f, "Term", class: "control-label" %>
     <%= text_input f, :word, class: "form-control" %>
     <%= label f, "Definition", class: "control-label" %>
-    <%= textarea f, :def, class: "form-control" %>
+    <%= textarea f, :def, class: "form-control", rows: "10" %>
+  <div style="font-size: small; margin-top: -1.5em; padding-top: 0em; margin-bottom: 1em;">You can use <a target="_blank" href="https://www.markdownguide.org/cheat-sheet/">markdown</a> to format the defintion! :)</div>
     <%= submit "Save", class: "btn btn-default", phx_disable_with: "Saving..." %>
-    <a href="#" phx-click="show_word" style="font-size: small;" phx-value="<%= @current_word %>">Cancel</link>&nbsp;
-  </form>
-
-  <script>
-    document.getElementById("section_select").onchange = function() {
-      new_section = document.getElementById("new_section")
-      if (this.value == -1) {
-        new_section.style.visibility = "visible"
-      } else {
-        new_section.value = ""
-        new_section.style.visibility = "hidden"
-      }
-    }
-  </script>
-<%  end %>
-
-<%= if @edit_word do %>
-  <%= f = form_for @edit_word, "#", [phx_submit: :save_word] %>
-    <%= label f, "Section", class: "control-label" %>
-    <div class="row">
-    <%= select f, :section_id, 
-              [[value: -1, key: "Create new..."] | GlossWeb.LayoutView.sections()],
-              selected: @current_section, id: "section_select" %>
-              &nbsp;&nbsp;<%= text_input f, :new_section, class: "form-control", style: "width: 10em; visibility: hidden", id: "new_section" %>
-    </div>
-    <%= label f, "Term", class: "control-label" %>
-    <%= text_input f, :word, class: "form-control" %>
-    <%= label f, "Definition", class: "control-label" %>
-    <%= textarea f, :def, class: "form-control" %>
-    <%= submit "Save", phx_disable_with: "Saving..." %>
-    <a href="#" phx-click="show_word" style="font-size: small;" phx-value="<%= @current_word %>">Cancel</link>&nbsp;
+    <a href="#" phx-click="show_word" style="font-size: small;" phx-value="<%= @current_word %>">Cancel</a>&nbsp;
   </form>
 
   <script>
