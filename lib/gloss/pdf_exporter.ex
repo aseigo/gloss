@@ -11,26 +11,23 @@ defmodule Gloss.PdfExporter do
 
   @impl GenServer
   def init(_) do
-    IO.puts("STARTIGN!")
     {:ok, :pdf, {:continue, :generate}}
   end
 
   @impl GenServer
   def handle_continue(:generate, state) do
-    IO.puts("CONTINUING!")
     generate()
     {:noreply, state}
   end
 
   @impl GenServer
   def handle_cast(:generate, state) do
-    IO.puts("GENERATRING!")
-    gen_path = Gloss.Glossary.export() |> IO.inspect()
-    target_path = Path.join([:code.priv_dir(:gloss), "static", relative_path()]) |>IO.inspect(label: "FOO")
+    gen_path = Gloss.Glossary.export()
+    target_path = Path.join([:code.priv_dir(:gloss), "static", relative_path()])
     target_path |> Path.dirname() |> File.mkdir_p()
     case File.rename(gen_path, target_path) do
       {:error, _} ->
-        File.cp(gen_path, target_path) |> IO.inspect()
+        File.cp(gen_path, target_path)
         File.rm(gen_path)
 
       _ -> :ok
