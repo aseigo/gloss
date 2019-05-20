@@ -1,5 +1,7 @@
 defmodule GlossWeb.PageLive do
   use Phoenix.LiveView
+  import Ecto.Query
+  alias Gloss.Repo
 
   def perma_link(id, word) do
     "/term/#{id}/#{String.replace(word, " ", "_") |> URI.encode()}"
@@ -28,6 +30,7 @@ defmodule GlossWeb.PageLive do
     current_section = GlossWeb.LayoutView.sections() |> Enum.at(0) |> Keyword.get(:value)
     {:ok, socket
           |> assign(current_word: Map.get(socket.assigns, :current_word), create_word: nil, edit_word: nil)
+          |> assign(autocompletes: [], query: nil)
           |> assign_current_section(current_section)
           |> assign_sections()
           |> update_word_list(current_section)
@@ -111,6 +114,30 @@ defmodule GlossWeb.PageLive do
     |> assign(edit_word: nil, create_word: nil, current_word: nil)
     |> assign_current_section(v)
                |> update_word_list(v)}
+  end
+
+  def handle_event("suggest", %{"q" => query}, socket) when byte_size(query) <= 1024 do
+    query = from w in "words",
+            select: {w.id, w.word},
+            where: ilike(w.word, ^"%#{query}%")
+
+    words = Repo.all(query)
+    {:noreply, assign(socket, autocompletes: words)}
+  end
+
+  def handle_event("search", %{"q" => query}, socket) when byte_size(query) <= 1024 do
+    # reset the search form data
+    socket = assign(socket, autocompletes: [], query: nil)
+
+    # prep the query
+    query = from w in "words",
+            select: {w.id, w.section_id},
+            where: w.word == ^query
+
+    case Repo.one(query) do
+      nil -> {:noreply, socket}
+      {word_id, section_id} -> {:noreply, assign(socket, current_word: word_id, current_section: section_id)}
+    end
   end
 
   def handle_info(_, socket) do

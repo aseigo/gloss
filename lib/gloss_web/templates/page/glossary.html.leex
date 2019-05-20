@@ -56,12 +56,22 @@
   <section class="jumplist" id="divider">&nbsp;</section>
 <% end %>
 
-<section>
+<section class="row">
   <form phx-change="section_select">
+     Section:
      <%=
       select(:section_selector, :section_selector, @sections, selected: @current_section)
       %>
   </form>
+&nbsp;&nbsp;
+    <form phx-change="suggest" phx-submit="search" style="position: absolute; right: 0px">
+      <input type="text" name="q" value="<%= @query %>" list="matches" placeholder="Search...">
+      <datalist id="matches">
+        <%= for {word_id, word} <- @autocompletes do %>
+          <option key="<%= word_id %>"><%= word %></option>
+        <% end %>
+      </datalist>
+    </form>
 </section>
 
 <div class="wordlist">
