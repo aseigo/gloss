@@ -76,7 +76,7 @@
 
 <div class="wordlist">
   <%= for {id, word} <- @words do %>
-    <a href="#" phx-click="show_word" phx-value="<%= id %>"><%= word %></link><br/>
+    <%= Phoenix.LiveView.live_link word, to: GlossWeb.PageLive.perma_link(id, word) %></br>
   <% end %>
 </div>
 

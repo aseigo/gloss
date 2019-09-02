@@ -2,6 +2,7 @@ defmodule GlossWeb.PageLive do
   use Phoenix.LiveView
   import Ecto.Query
   alias Gloss.Repo
+  alias GlossWeb.Router.Helpers, as: Routes
 
   def perma_link(id, word) do
     "/term/#{id}/#{String.replace(word, " ", "_") |> URI.encode()}"
@@ -13,10 +14,11 @@ defmodule GlossWeb.PageLive do
 
   def mount(%{path_params: %{"id" => id_param}}, socket) when is_bitstring(id_param) do
     id =
-    case Integer.parse(id_param) do
-      :error -> nil
-      {id, _} -> id
-    end
+      case Integer.parse(id_param) do
+        :error -> nil
+        {id, _} -> id
+      end
+
     assign(socket, :current_word, id) |> do_mount()
   end
 
@@ -35,6 +37,22 @@ defmodule GlossWeb.PageLive do
           |> assign_sections()
           |> update_word_list(current_section)
     }
+  end
+
+  def handle_params(%{"id" => id}, _uri, socket) do
+    id =
+      case Integer.parse(id) do
+        {v, _} -> v
+        :error -> nil
+      end
+    IO.puts("(((( going to find #{id}")
+
+    {:noreply, assign(socket, current_word: id, create_word: nil, edit_word: nil)}
+  end
+
+  def handle_params(params, _uri, socket) do
+    IO.puts("(((( not going to find #{inspect params}")
+    {:noreply, socket}
   end
 
   def handle_event("edit_current_word", _payload, socket) do
@@ -94,14 +112,9 @@ defmodule GlossWeb.PageLive do
     }
   end
 
-  def handle_event("show_word", payload, socket) do
-    id =
-      case Integer.parse(payload) do
-        {v, _} -> v
-        :error -> nil
-      end
-
-    {:noreply, assign(socket, current_word: id, create_word: nil, edit_word: nil)}
+  def handle_event("show_word", id, socket) do
+    IO.puts("Showing word #{inspect id}")
+    {:noreply, live_redirect(socket, to: Routes.live_path(socket, GlossWeb.PageLive, %{id: id}))}
   end
 
   def handle_event("section_select", %{"section_selector" => %{"section_selector" => ""}}, socket) do

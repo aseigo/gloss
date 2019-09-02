@@ -249,12 +249,14 @@ defmodule Gloss.Glossary do
   end
 
   defp export_pdf(sections) do
-    {:ok, path} =
-      sections
+    result = sections
       |> Enum.reduce("", &add_section_to_export/2)
       |> PdfGenerator.generate()
 
-    path
+    case result do
+      {:ok, path} -> path
+      _ -> ""
+    end
   end
 
   defp add_section_to_export(section, html) do
