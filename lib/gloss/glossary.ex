@@ -36,6 +36,7 @@ defmodule Gloss.Glossary do
 
   """
   def get_section!(id), do: Repo.get!(Section, id)
+  def get_section(id), do: Repo.get(Section, id)
 
   @doc """
   Creates a section.
