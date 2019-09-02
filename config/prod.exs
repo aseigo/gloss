@@ -15,7 +15,7 @@ config :gloss, GlossWeb.Endpoint,
   cache_static_manifest: "priv/static/cache_manifest.json",
   render_errors: [view: GlossWeb.ErrorView, accepts: ~w(html json)],
   pubsub: [name: Gloss.PubSub, adapter: Phoenix.PubSub.PG2],
-  check_origin: ["//glossary.nomoko.world:4000"]
+  check_origin: ["//glossary.nomoko.world:4000", "//glossary.nomoko.world:4000", "//127.0.0.1", "//localhost:4000"]
 
 
 # Do not print debug messages in production
