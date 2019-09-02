@@ -52,11 +52,7 @@ defmodule Gloss.MixProject do
       {:plug_cowboy, "~> 2.0"},
       {:phoenix_live_view, github: "phoenixframework/phoenix_live_view"},
       {:pdf_generator, "~> 0.5.3"},
-      {:earmark, "~> 1.3"},
-
-      # deployment
-      {:distillery, "~> 2.0"},
-      {:edeliver, "~> 1.6.0"}
+      {:earmark, "~> 1.3"}
 
       | dev_deps()
     ]
