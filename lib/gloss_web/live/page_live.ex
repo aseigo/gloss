@@ -45,13 +45,21 @@ defmodule GlossWeb.PageLive do
         {v, _} -> v
         :error -> nil
       end
-    IO.puts("(((( going to find #{id}")
 
     {:noreply, assign(socket, current_word: id, create_word: nil, edit_word: nil)}
   end
 
+  def handle_params(%{"section" => section}, _uri, socket) do
+    {:noreply,
+      socket
+        |> assign(edit_word: nil, create_word: nil, current_word: nil)
+        |> assign_current_section(section)
+        |> update_word_list(section)
+    }
+  end
+
   def handle_params(params, _uri, socket) do
-    IO.puts("(((( not going to find #{inspect params}")
+    IO.inspect(params, label: "Unknown params")
     {:noreply, socket}
   end
 
@@ -113,7 +121,6 @@ defmodule GlossWeb.PageLive do
   end
 
   def handle_event("show_word", id, socket) do
-    IO.puts("Showing word #{inspect id}")
     {:noreply, live_redirect(socket, to: Routes.live_path(socket, GlossWeb.PageLive, %{id: id}))}
   end
 
@@ -121,12 +128,11 @@ defmodule GlossWeb.PageLive do
     {:noreply, socket}
   end
 
-  def handle_event("section_select", %{"section_selector" => %{"section_selector" => v}}, socket) do
-    IO.puts("Changing section to #{v}")
-    {:noreply, socket
-    |> assign(edit_word: nil, create_word: nil, current_word: nil)
-    |> assign_current_section(v)
-               |> update_word_list(v)}
+  def handle_event("section_select", %{"section_selector" => %{"section_selector" => id}} = _params, socket) do
+    case Gloss.Glossary.get_section(id) do
+      %{name: name} -> {:noreply, live_redirect(socket, to: "/section/#{id}/#{safely_encode(name)}")}
+      _ -> {:noreply, socket}
+    end
   end
 
   def handle_event("suggest", %{"q" => query}, socket) when byte_size(query) <= 1024 do
@@ -167,5 +173,11 @@ defmodule GlossWeb.PageLive do
 
   defp update_word_list(socket, section) do
     assign(socket, words: Gloss.Glossary.list_words(section))
+  end
+
+  defp safely_encode(term) do
+    term
+    |> String.replace("/", "_")
+    |> URI.encode()
   end
 end
