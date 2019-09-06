@@ -29,7 +29,7 @@
       <section class="container">
         <nav role="navigation">
         </nav>
-          <img src="<%= Routes.static_path(@conn, "/images/glossary_header.png") %>" alt="Nomoko Glossary"/>
+          <img src="<%= Routes.static_path(@conn, "/images/glossary_header.png") %>" alt="Glossary"/>
       </section>
     </header>
     <main role="main" class="container">
